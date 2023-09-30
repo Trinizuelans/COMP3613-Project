@@ -8,9 +8,9 @@ class Standing (enum.Enum):
     #need more categories for this
 
 class Student (User):
-    year = db.Column(db.Integer,primary_key = True)
+    year = db.Column(db.Integer)
     programme = db.Column(db.String(120), default = "NULL")
-    reviews = db.relationship('Review',backref = db.backref('review',lazy = 'joined'))
+    reviews = db.relationship('Review',backref = db.backref('student',lazy = 'joined'))
     karma = db.Column(db.Numeric(precision=10, scale=2), default = 0)
     standing = db.Column(db.Enum(Standing), nullable = False, default = Standing.NEUTRAL)
 

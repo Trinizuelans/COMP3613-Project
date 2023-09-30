@@ -6,6 +6,8 @@ from App.database import db, get_migrate
 from App.main import create_app
 from App.controllers import ( create_user, get_all_users_json, get_all_users )
 
+from App.controllers import(addStudent,addStaff)
+
 # This commands file allow you to create convenient CLI commands for testing controllers
 
 app = create_app()
@@ -16,7 +18,8 @@ migrate = get_migrate(app)
 def initialize():
     db.drop_all()
     db.create_all()
-    create_user('bob', 'bobpass')
+    staff = addStaff(735,"John","Doe","john.doe@sta.uwi.edu","johnpass")
+    student = addStudent(816,"Sally","Shell","sally.shell@my.uwi.edu",2,"BSc Computer Science (Special)")
     print('database intialized')
 
 '''
@@ -30,12 +33,16 @@ User Commands
 user_cli = AppGroup('user', help='User object commands') 
 
 # Then define the command and any parameters and annotate it with the group (@)
-@user_cli.command("create", help="Creates a user")
-@click.argument("username", default="rob")
+@user_cli.command("create", help="Creates a staff user")
+@click.argument("id", default="1")
+@click.argument("firstName", default="rob")
+@click.argument("lastName", default="Me")
+@click.argument("email", default="rob.me@sta.uwi.edu")
 @click.argument("password", default="robpass")
-def create_user_command(username, password):
-    create_user(username, password)
-    print(f'{username} created!')
+def create_user_command(id,firstName,lastName,email, password):
+    # create_user(username, password)
+    staff = addStaff(id,firstName,lastName,email, password)
+    print(f'{staff.firstName} created!')
 
 # this command will be : flask user create bob bobpass
 

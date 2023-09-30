@@ -11,6 +11,7 @@ class Staff(UserLogin):
         self.firstName = firstName
         self.lastName = lastName
         self.email = email
+        self.reviews = []
         self.set_password(password)
 
     def __repr__(self):
