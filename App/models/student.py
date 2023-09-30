@@ -15,20 +15,22 @@ class Student (User):
     standing = db.Column(db.Enum(Standing), nullable = False, default = Standing.NEUTRAL)
 
 
-    def __init__(self,id,username,email,year,programme):
+    def __init__(self,id,firstName,lastName,email,year,programme):
         self.id = id
-        self.username = username 
+        self.firstName = firstName 
+        self.lastName = lastName
         self.email = email
         self.year = year
         self.programme = programme
 
     def __repr__(self):
-        return f'<Student {self.id} {self.username} {self.email} {self.year} {self.programme}>'
+        return f'<Student {self.id} {self.firstName} {self.lastName} {self.email} {self.year} {self.programme}>'
 
     def toJSON(self):
         return{
             'studentId': self.id,
-            'studentName': self.username,
+            'firstName': self.firstName,
+            'lastName':self.lastName,
             'email': self.email,
             'year': self.year,
             'programme': self.programme

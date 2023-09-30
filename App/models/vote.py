@@ -12,12 +12,13 @@ class Vote (db.Model):
         self.rating = rating
 
     def __repr__(self):
-        return f'<Vote {self.voteId} {self.voterId} {self.year}{self.rating}>'
+        return f'<Vote {self.voteId} {self.voterId} {self.year} {self.reviewId} {self.rating}>'
 
     def toJSON(self):
             return{
                 'voteId': self.voteId,
                 'voterId': self.voterId,
+                'reviewId': self.reviewId,
                 'rating': self.rating
             }
     
