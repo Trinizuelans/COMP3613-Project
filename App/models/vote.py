@@ -6,13 +6,13 @@ class Vote (db.Model):
     reviewId = db.Column(db.Integer, db.ForeignKey('review.reviewId'), nullable=False)
     rating = db.Column (db.Integer)
 
-    def __init__(self,voteId,voterId,rating):
-        self.voteId = voteId
+    def __init__(self,voterId,reviewId,rating):
         self.voterId = voterId
+        self.reviewId = reviewId
         self.rating = rating
 
     def __repr__(self):
-        return f'<Vote {self.voteId} {self.voterId} {self.year} {self.reviewId} {self.rating}>'
+        return f'<Vote {self.voteId} {self.voterId} {self.reviewId} {self.rating}>'
 
     def toJSON(self):
             return{
