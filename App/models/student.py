@@ -2,9 +2,9 @@ from App.database import db
 from .user import *
 import enum
 
-class Standing (enum.Enum):
-    NEUTRAL = "Neutral"
-    EXCELLENT = "Excellent"
+# class Standing (enum.Enum):
+#     NEUTRAL = "Neutral"
+#     EXCELLENT = "Excellent"
     #need more categories for this
 
 class Student (User):
@@ -12,7 +12,7 @@ class Student (User):
     programme = db.Column(db.String(120), default = "NULL")
     reviews = db.relationship('Review',backref = db.backref('student',lazy = 'joined'))
     karma = db.Column(db.Numeric(precision=10, scale=2), default = 0)
-    standing = db.Column(db.Enum(Standing), nullable = False, default = Standing.NEUTRAL)
+    standing = db.Column(db.String(120), nullable = False, default = "NULL")
 
 
     def __init__(self,id,firstName,lastName,email,year,programme):
@@ -24,7 +24,7 @@ class Student (User):
         self.programme = programme
 
     def __repr__(self):
-        return f'<Student {self.id} {self.firstName} {self.lastName} {self.email} {self.year} {self.programme}>'
+        return f'<Student {self.id} {self.firstName} {self.lastName} {self.email} {self.year} {self.programme} {self.karma} {self.standing}>'
 
     def toJSON(self):
         return{

@@ -5,7 +5,7 @@ from flask.cli import with_appcontext, AppGroup
 from App.database import db, get_migrate
 from App.main import create_app
 from App.controllers import ( create_user, get_all_users_json, get_all_users )
-from App.controllers import(update_student_year, update_student_programme,calcAvgReviewScore,getRatedReviews)
+from App.controllers import(update_student_year, update_student_programme,calcAvgReviewScore,getRatedReviews,calcKarma,determineStanding)
 from App.controllers import(addStudent,addStaff,addSemester,addReview,addVote,addReviewVotes,getAllReviews_JSON)
 from datetime import date
 
@@ -89,7 +89,16 @@ def update_prog_command(id,prog):
 @click.argument("id", default="1")
 def get_rev_command(id):
      revs = getRatedReviews(id)
-    
+
+@user_cli.command("getStudKarma", help="gets student karma")
+@click.argument("id", default="1")
+def get_karma_command(id):
+     karma = calcKarma(id)
+
+@user_cli.command("getStudStanding", help="gets student standing")
+@click.argument("id", default="1")
+def get_standing_command(id):
+     standing = determineStanding (id)   
 
 app.cli.add_command(user_cli) # add the group to the cli
 

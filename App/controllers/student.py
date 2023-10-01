@@ -41,4 +41,22 @@ def getRatedReviews(id):
     print (student.reviews)
     return student.reviews
 
-# def calcKarma():
+def calcKarma(id):
+     student = get_student(id)
+     sum = 0
+     for rev in student.reviews:
+        sum = sum + rev.score
+     student.karma = sum/len(student.reviews)
+     print(student)
+     return student.karma
+
+def determineStanding (id):
+    student = get_student(id)
+    if student.karma <= -1 :
+      student.standing = "Disliked"
+    if student.karma > -1 and student.karma < 1:
+      student.standing = "Neutral"
+    else:
+      student.standing = "Liked"
+    print(student)
+    return student.standing
