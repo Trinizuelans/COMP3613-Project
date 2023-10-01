@@ -20,3 +20,30 @@ def getVotesByReviewId_JSON(reviewId):
     votes = [vote.get_json() for vote in votes]
     return votes
 
+def getTotalScore(reviewId):
+    votes = getVotesByReviewId(reviewId)
+    sum = 0
+    for vote in votes:
+        sum = sum + vote.rating
+
+    return sum
+
+def getNumVotes(reviewId):
+    votes = getVotesByReviewId(reviewId)
+    return len(votes)
+
+def calcAvgReviewScore(reviewId):
+    score = getTotalScore(reviewId)
+    voters = getNumVotes(reviewId)
+    if voters == 0:
+        return 0
+    return (score/voters)
+
+def calcUpvotes(reviewId):
+    votes = Vote.query.filter_by(reviewId = reviewId, upvote = True).all()
+    return len(votes)
+
+def calcDownvotes(reviewId):
+    votes = Vote.query.filter_by(reviewId = reviewId, upvote = False).all()
+    return len(votes)
+

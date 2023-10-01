@@ -3,9 +3,16 @@ import App.controllers.vote as vote
 from App.database import db
 
 def addReview(creatorId,studentId,semesterId,comment,score):
-    newReview = Review(creatorId=creatorId,studentId=studentId,semesterId=semesterId,comment=comment,score=score)
+    newReview = Review(creatorId=creatorId,studentId=studentId,semesterId=semesterId,comment=comment,score=0)
     db.session.add(newReview)
     db.session.commit()
+
+    v = vote.addVote(creatorId,newReview.reviewId,score)
+    newReview = addReviewVotes(newReview.reviewId)
+    newReview.score = vote.calcAvgReviewScore(newReview.reviewId)
+    db.session.add(newReview)
+    db.session.commit()
+  
     return newReview
 
 def getReview(reviewId):
@@ -27,3 +34,9 @@ def getAllReviews_JSON():
     reviews = [review.toJSON()for review in reviews]
     return reviews
 
+def updateReviewScore(reviewId):
+    review  = getReview(reviewId)
+    score = vote.calcAvgReviewScore(reviewId)
+    review.score = score
+    db.session.add(review)
+    db.session.commit()
