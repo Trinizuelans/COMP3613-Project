@@ -20,4 +20,16 @@ def get_all_users_json():
     students = [student.get_json() for student in students]
     return students
 
+def update_student_year(id, year):
+    student = get_student(id)
+    print(student.toJSON())
+    student.year = year
+    print(student.toJSON())
+
+def update_student_programme(id, prog):
+    student = get_student(id)
+    print(student.toJSON())
+    student.programme = prog
+    print(student.toJSON())
+
 # def calcKarma():

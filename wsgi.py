@@ -5,7 +5,7 @@ from flask.cli import with_appcontext, AppGroup
 from App.database import db, get_migrate
 from App.main import create_app
 from App.controllers import ( create_user, get_all_users_json, get_all_users )
-
+from App.controllers import(update_student_year, update_student_programme)
 from App.controllers import(addStudent,addStaff,addSemester,addReview,addVote,addReviewVotes,getAllReviews_JSON)
 from datetime import date
 
@@ -32,6 +32,7 @@ def initialize():
 
 '''
 User Commands
+
 '''
 
 # Commands can be organized using groups
@@ -61,6 +62,19 @@ def list_user_command(format):
         print(get_all_users())
     else:
         print(get_all_users_json())
+
+@user_cli.command("UpdateYear", help="Updates Student year")
+@click.argument("id", default="1")
+@click.argument("year", default="1")
+def update_year_command(id,year):
+     update_student_year(id, year)
+
+@user_cli.command("UpdateProgramme", help="Updates Student programme")
+@click.argument("id", default="1")
+@click.argument("prog", default="Computer Science General")
+def update_prog_command(id,prog):
+     update_student_programme(id, prog)
+    
 
 app.cli.add_command(user_cli) # add the group to the cli
 
