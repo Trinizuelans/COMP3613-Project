@@ -22,10 +22,9 @@ def getVotesByReviewId_JSON(reviewId):
 
 def getTotalScore(reviewId):
     votes = getVotesByReviewId(reviewId)
-    sum = 0
+    sum = 0   
     for vote in votes:
         sum = sum + vote.rating
-
     return sum
 
 def getNumVotes(reviewId):
@@ -47,3 +46,11 @@ def calcDownvotes(reviewId):
     votes = Vote.query.filter_by(reviewId = reviewId, upvote = False).all()
     return len(votes)
 
+def updateVote(voteId,rating,upvote):
+    vote = getVote(voteId)
+    if vote:
+        vote.rating = rating
+        vote.upvote = upvote
+        db.session.add(vote)
+        db.session.commit()
+    return vote

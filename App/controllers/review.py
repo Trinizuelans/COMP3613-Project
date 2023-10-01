@@ -38,6 +38,7 @@ def addReviewVotes(reviewId):
     review = getReview(reviewId)
     if review:
         review.votes = votes
+        review.score = vote.calcAvgReviewScore(review.reviewId)
         db.session.add(review)
         db.session.commit()
         return review
