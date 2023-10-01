@@ -1,5 +1,7 @@
 from App.models import Student
 from App.database import db
+import App.controllers.review as review
+
 
 def addStudent (id,firstName,lastName,email,year,programme):
     newStudent = Student(id = id,firstName = firstName,lastName = lastName,email = email,year = year,programme = programme)
@@ -31,5 +33,12 @@ def update_student_programme(id, prog):
     print(student.toJSON())
     student.programme = prog
     print(student.toJSON())
+
+
+def getRatedReviews(id):
+    student = get_student(id)
+    student.reviews = review.getReviewByStudent(student.id)
+    print (student.reviews)
+    return student.reviews
 
 # def calcKarma():
