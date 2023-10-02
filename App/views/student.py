@@ -9,7 +9,8 @@ student_views = Blueprint('student_views', __name__, template_folder='../templat
 from App.controllers import (
     get_all_students,
     get_all_students_json, 
-    addStudent  
+    addStudent,
+    update_student 
 )
 
 @student_views.route('/api/students', methods=['GET'])
@@ -20,5 +21,11 @@ def get_student_action():
 @student_views.route('/addstudent', methods=['POST'])
 def create_student_action():
     data = request.form
-    addStudent(data['id'], data['firstname'],data['lastname'], data['email'], data['year'],data['programme'])
+    addStudent(data['id'], data['firstname'], data['lastname'], data['email'], data['year'],data['programme'])
+    return redirect(url_for('student_views.get_student_action'))
+
+@student_views.route('/updatestudent', methods=['POST'])
+def update_student_action():
+    data = request.form
+    update_student(data['id'], data['firstname'], data['lastname'], data['email'], data['year'],data['programme'])
     return redirect(url_for('student_views.get_student_action'))
