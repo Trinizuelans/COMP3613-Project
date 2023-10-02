@@ -20,6 +20,5 @@ def get_student_action():
 @student_views.route('/addstudent', methods=['POST'])
 def create_student_action():
     data = request.form
-    flash(f"User {data['student']} created!")
-    student = addStudent(data['id'], data['firstname'],data['lastname'], data['year'],data['programme'])
+    addStudent(data['id'], data['firstname'],data['lastname'], data['email'], data['year'],data['programme'])
     return redirect(url_for('student_views.get_student_action'))
