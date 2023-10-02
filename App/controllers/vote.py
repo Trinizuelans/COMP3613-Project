@@ -1,8 +1,8 @@
 from App.models import Vote
 from App.database import db
 
-def addVote(voterId,reviewId,rating):
-    newVote = Vote(voterId=voterId,reviewId=reviewId,rating=rating)
+def addVote(voterId,reviewId,rating,upvote = None):
+    newVote = Vote(voterId=voterId,reviewId=reviewId,rating=rating, upvote = upvote)
     db.session.add(newVote)
     db.session.commit()
     return newVote

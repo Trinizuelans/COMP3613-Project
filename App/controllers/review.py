@@ -42,6 +42,14 @@ def addReviewVotes(reviewId):
     if review:
         review.votes = votes
         review.score = vote.calcAvgReviewScore(review.reviewId)
+        upvote = vote.calcUpvotes(reviewId)
+        downvote = vote.calcDownvotes(reviewId)
+        votedifference = upvote - downvote
+
+        review.upvote = upvote
+        review.downvote = downvote
+        review.votebalance = votedifference
+
         db.session.add(review)
         db.session.commit()
         return review

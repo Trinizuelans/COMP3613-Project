@@ -25,13 +25,13 @@ def initialize():
     newSemester = addSemester("SEM1",2023,date(2023,8,25),date(2023,12,25))
 
     newReview = addReview(735,816,1,"Sally sleeps in every class of mine!",-1)
-    newVote = addVote(738,1,2)
+    newVote = addVote(738,1,2,False)
     addvote = addReviewVotes(1)
     newReview.score = calcAvgReviewScore(newReview.reviewId)
     
 
     newReview1 = addReview(738,816,1,"Sally is a bad student!",-2)
-    newVote = addVote(735,2,3)
+    newVote = addVote(735,2,3, False)
     addvote = addReviewVotes(2)
     newReview1.score = calcAvgReviewScore(newReview1.reviewId)
     print(newReview1.score)
