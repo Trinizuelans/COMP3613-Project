@@ -1,5 +1,6 @@
 from .userLogin import UserLogin
 from App.database import db
+from flask import json
 
 class Staff(UserLogin):
 
@@ -18,10 +19,11 @@ class Staff(UserLogin):
         return f'<Staff {self.id} {self.firstName} {self.lastName} {self.email} {self.reviews}>'
 
     def toJSON(self):
+        from App.controllers.review import (getAllCreatorReviews_JSON)
         return{
             'staffid': self.id,
             'firstName': self.firstName,
             'lastName': self.lastName,
             'email': self.email,
-            'reviews': self.reviews
+            'reviews': getAllCreatorReviews_JSON(self.id)
         }

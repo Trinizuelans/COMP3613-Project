@@ -1,4 +1,5 @@
 from App.database import db
+from flask import json
 
 class Review (db.Model):
     reviewId = db.Column(db.Integer, primary_key=True)
@@ -24,11 +25,12 @@ class Review (db.Model):
         return f'<Review {self.reviewId} {self.creatorId} {self.studentId} {self.votes} {self.semesterId} {self.comment}{self.score}>'
 
     def toJSON(self):
+            from App.controllers.vote import (getVotesByReviewId_JSON)
             return{
                 'reviewId': self.reviewId,
                 'creatorId': self.creatorId,
                 'studentId': self.studentId,
-                'votes': self.votes,
+                'votes': getVotesByReviewId_JSON(self.reviewId),
                 'semester': self.semesterId,
                 'comment': self.comment,
                 'score' : self.score

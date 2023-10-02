@@ -17,7 +17,7 @@ def getVotesByReviewId_JSON(reviewId):
     votes = getVotesByReviewId(reviewId)
     if not votes:
         return []
-    votes = [vote.get_json() for vote in votes]
+    votes = [vote.toJSON() for vote in votes]
     return votes
 
 def getTotalScore(reviewId):

@@ -13,11 +13,11 @@ def get_staff(id):
 def get_all_staff():
      return Staff.query.all()
 
-def get_all_users_json():
+def get_all_staff_json():
     staff = get_all_staff()
     if not staff:
         return []
-    staff = [s.get_json() for s in staff]
+    staff = [s.toJSON() for s in staff]
     return staff
 
 
