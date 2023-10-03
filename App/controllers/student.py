@@ -34,6 +34,19 @@ def update_student_programme(id, prog):
     student.programme = prog
     print(student.toJSON())
 
+def update_student(id, firstname, lastname, email, year, prog):
+    student = get_student(id)
+    print(student.toJSON())
+    student.firstName = firstname
+    student.lastName = lastname
+    student.email = email
+    student.year = year
+    student.programme = prog
+    db.session.add(student)
+    db.session.commit()
+    print(student.toJSON())
+
+
 
 def getRatedReviews(id):
     student = get_student(id)
