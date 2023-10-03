@@ -7,6 +7,7 @@ def addStudent (id,firstName,lastName,email,year,programme):
     newStudent = Student(id = id,firstName = firstName,lastName = lastName,email = email,year = year,programme = programme)
     db.session.add(newStudent)
     db.session.commit()
+    updateStudentStatistics(newStudent.id)
     return newStudent
 
 def get_student(id):
@@ -61,23 +62,32 @@ def getRatedReviews(id):
 def calcKarma(id):
      student = get_student(id)
      sum = 0
+     length = len(student.reviews)
+
+     if length == 0:
+         return 0
+     
      for rev in student.reviews:
         sum = sum + rev.score
-     student.karma = sum/len(student.reviews)
+     student.karma = sum/length
     
      return student.karma
 
 def determineStanding (id):
     student = get_student(id)
-    if student.karma <= -1 :
-      student.standing = "Disliked"
-    if student.karma > -1 and student.karma < 1:
-      student.standing = "Neutral"
+
+    if student.karma < -2:
+        student.standing = "Poor"
+    elif student.karma >= -2 and student.karma <-1:   
+        student.standing = "Bad"    
+    elif student.karma >= -1 and student.karma <1:   
+        student.standing = "Normal"
+    elif student.karma >= 1 and student.karma < 2:
+        student.standing = "Good"
     else:
-      student.standing = "Liked"
+        student.standing = "Excellent"
+
     return student.standing
-
-
 
 
 def updateStudentStatistics(id):
