@@ -3,6 +3,8 @@ import App.controllers.vote as vote
 import App.controllers.student as stu
 from App.database import db
 
+# logs a review 
+
 def addReview(creatorId,studentId,semesterId,comment,score):
 
     #create a new review and commit it to generate a review ID
@@ -28,11 +30,17 @@ def addReview(creatorId,studentId,semesterId,comment,score):
   
     return newReview
 
+# gets first review matching the specified reviewID
+
 def getReview(reviewId):
     return Review.query.filter_by(reviewId= reviewId).first()
 
+# gets all the reviews matching the specified studentID
+
 def getReviewByStudent(studId):
     return Review.query.filter_by(studentId= studId).all()
+
+# gets all the reviews matching the specified studentID and jsonify it
 
 def getReviewsByStudent_JSON(studId):
     reviews = Review.query.filter_by(studentId= studId).all()
@@ -41,9 +49,12 @@ def getReviewsByStudent_JSON(studId):
     reviews = [review.toJSON()for review in reviews]
     return reviews
     
+# gets all the reviews matching the specified creatorID  
 
 def getReviewsByCreator(creatorId):
     return Review.query.filter_by(creatorId= creatorId).all()
+
+# adds all the votes of a review, finds the review score, updates the number of upvotes, downvotes and votedifference
 
 def addReviewVotes(reviewId):
     votes = vote.getVotesByReviewId(reviewId)
@@ -66,6 +77,8 @@ def addReviewVotes(reviewId):
         stu.updateStudentStatistics(review.studentId)
 
         return review
+
+# gets all the reviews
     
 def getAllReviews_JSON():
     reviews = Review.query.all()
@@ -74,6 +87,8 @@ def getAllReviews_JSON():
     reviews = [review.toJSON()for review in reviews]
     return reviews
 
+# gets all the reviews matching the specified creatorID and jsonify it 
+
 def getAllCreatorReviews_JSON(creatorId):
     reviews = getReviewsByCreator(creatorId)
     if not reviews:
@@ -81,12 +96,16 @@ def getAllCreatorReviews_JSON(creatorId):
     reviews = [review.toJSON()for review in reviews]
     return reviews
 
+# gets all the reviews matching the specified studentID and jsonify it
+
 def getAllStudentReviews_JSON(studentId):
     reviews = getReviewByStudent(studentId)
     if not reviews:
         return []
     reviews = [review.toJSON()for review in reviews]
     return reviews
+
+# updates the review score after another staff memeber casts a vote
 
 def updateReviewScore(reviewId):
     review  = getReview(reviewId)

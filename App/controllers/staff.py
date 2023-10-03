@@ -1,17 +1,25 @@
 from App.models import Staff
 from App.database import db
 
+# adds a new staff memeber
+
 def addStaff (id,firstName,lastName,email,password):
     newStaff = Staff(id = id,firstName = firstName,lastName = lastName,email = email, password = password)
     db.session.add(newStaff)
     db.session.commit()
     return newStaff
 
+# gets a staff memeber with specified id
+
 def get_staff(id):
     return Staff.query.filter_by(id = id).first()
 
+# gets all the staff memebers 
+
 def get_all_staff():
      return Staff.query.all()
+
+# gets all the staff memebers and jsonify it
 
 def get_all_staff_json():
     staff = get_all_staff()
