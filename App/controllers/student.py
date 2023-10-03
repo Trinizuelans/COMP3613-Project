@@ -12,6 +12,10 @@ def addStudent (id,firstName,lastName,email,year,programme):
 def get_student(id):
     return Student.query.filter_by(id = id).first()
 
+def get_student_JSON(id):
+    student = Student.query.filter_by(id = id).first()
+    return student.toJSON()
+
 def get_all_students():
      return Student.query.all()
 
@@ -72,6 +76,8 @@ def determineStanding (id):
     else:
       student.standing = "Liked"
     return student.standing
+
+
 
 
 def updateStudentStatistics(id):

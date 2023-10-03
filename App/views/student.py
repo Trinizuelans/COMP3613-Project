@@ -11,7 +11,11 @@ from App.controllers import (
     get_student,
     get_all_students_json, 
     addStudent,
-    update_student 
+    update_student,
+    getRatedReviews,
+    get_student_JSON,
+    getReviewsByStudent_JSON
+
 )
 
 @student_views.route('/api/students', methods=['GET'])
@@ -23,13 +27,15 @@ def get_students_action():
     except Exception:
         return jsonify(message='Unable to retrieve students!'),400
     
-@student_views.route('/student/<int:id>', methods=['GET'])
-def search_student_action(id):
+@student_views.route('/student/<int:studentid>', methods=['GET'])
+def search_student_action(studentid):
     try:
-        student =  get_student(id)
+        student =  get_student(studentid)
         if not student:
             return jsonify(message='Unable to retrieve student!'),400
-        return jsonify(student),200
+        
+        student_json = get_student_JSON(studentid)
+        return jsonify(student_json),200
     
     except Exception:
         return jsonify(message='Unable to retrieve student!'),400
@@ -53,4 +59,13 @@ def update_student_action():
     
     except Exception: 
         return jsonify(message='Unable to update Student!'),401
+    
+@student_views.route('/student/<int:id>/review', methods=['GET'])
+def student_review_action(id):
+    try:
+        reviews = getRatedReviews(id)
+        return jsonify(getReviewsByStudent_JSON(id)),200
+
+    except Exception: 
+        return jsonify(message='Unable to get student reviews!'),40
 

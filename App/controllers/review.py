@@ -34,6 +34,14 @@ def getReview(reviewId):
 def getReviewByStudent(studId):
     return Review.query.filter_by(studentId= studId).all()
 
+def getReviewsByStudent_JSON(studId):
+    reviews = Review.query.filter_by(studentId= studId).all()
+    if not reviews:
+        return []
+    reviews = [review.toJSON()for review in reviews]
+    return reviews
+    
+
 def getReviewsByCreator(creatorId):
     return Review.query.filter_by(creatorId= creatorId).all()
 
