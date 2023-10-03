@@ -74,3 +74,13 @@ def updateReviewScore(reviewId):
     review.score = score
     db.session.add(review)
     db.session.commit()
+
+#checks existing upvotes and downvotes for double votes
+def validateReviewVotes(reviewId,voterId):
+    review = getReview(reviewId)
+
+    for vote in review.votes:
+        if vote.voterId == voterId:
+            return False
+        
+    return True

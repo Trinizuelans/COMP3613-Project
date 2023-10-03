@@ -54,3 +54,11 @@ def updateVote(voteId,rating,upvote):
         db.session.add(vote)
         db.session.commit()
     return vote
+
+
+#rejects ratings outside the range -3 to 3 as well as ratings equal to the review creator's rating
+def validateDownvoteRating(c_rating,rating):
+    if rating >= -3 and rating <=3:
+        if  rating != c_rating:
+            return True
+    return False

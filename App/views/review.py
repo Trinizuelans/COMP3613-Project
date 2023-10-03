@@ -6,8 +6,14 @@ from App.controllers import(addReview)
 
 review_views = Blueprint('review_views', __name__, template_folder='../templates')
 
-@review_views.route('/logreview', methods=['POST'])
-def create_student_action():
-    data = request.form
-    review = addReview(data['id'],data['studentId'],data['semesterId'],data['comment'],data['score'])
-    return jsonify(message='success'), 200
+@review_views.route('/review', methods=['POST'])
+def create_review_action():
+    try:
+        data = request.form
+        review = addReview(data['id'],data['studentId'],data['semesterId'],data['comment'],data['score'])
+        if not review:
+            return jsonify(message='Error: Review was unable to be created!'), 401
+        return jsonify(message='Review created!'), 200
+    except Exception:
+        return jsonify(message='Error: Review was unable to be created!'), 401
+    
