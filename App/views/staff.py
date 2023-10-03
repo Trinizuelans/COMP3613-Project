@@ -21,11 +21,12 @@ staff_views = Blueprint('staff_views', __name__, template_folder='../templates')
 
 
 @staff_views.route('/api/staff', methods=['GET'])
+@jwt_required()
 def get_users_action():
     users = get_all_staff_json()
     return jsonify(users)
 
-@staff_views.route('/staff/login', methods=['POST'])
+@staff_views.route('/api/login', methods=['POST'])
 def staff_login_api():
   data = request.form
   token = jwt_authenticate(data['id'], data['password'])
@@ -47,30 +48,20 @@ def signup_action():
   except Exception:  # attempted to insert a duplicate user
     return jsonify(message='Staff account with id or email already exists!')
 
+@staff_views.route('/staff/login', methods=['POST'])
+def login_action():
+    data = request.form
+    user = login(data['id'], data['password'])
+    if user:
+        login_user(user)
+        return jsonify(message = 'Staff logged in!') ,200
+    return jsonify(message ='bad id or password given'), 401
 
-
-
-
-
-
-
-
-
-
-
-
-
-# @staff_views.route('/loginstaff', methods=['POST'])
-# def login_action():
-#     data = request.form
-#     user = login(data['id'], data['password'])
-#     if user:
-#         login_user(user)
-#         return 'Staff logged in!'
-#     return 'bad id or password given', 401
-
-# @staff_views.route('/logout', methods=['GET'])
-# def logout_action():
-#     data = request.form
-#     user = login(data['id'], data['password'])
-#     return 'Staff logged out!'
+@staff_views.route('/logout', methods=['GET'])
+def logout_action():
+    try:
+      data = request.form
+      user = login(data['id'], data['password'])
+      return jsonify(message = 'Staff logged out!') ,200
+    except Exception:
+       return jsonify(message = 'Error: Unable to log out!') ,401

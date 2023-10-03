@@ -19,6 +19,7 @@ from App.controllers import (
 )
 
 @student_views.route('/api/students', methods=['GET'])
+@jwt_required()
 def get_students_action():
     try:
         students =  get_all_students_json()
@@ -28,6 +29,7 @@ def get_students_action():
         return jsonify(message='Unable to retrieve students!'),400
     
 @student_views.route('/student/<int:studentid>', methods=['GET'])
+@jwt_required()
 def search_student_action(studentid):
     try:
         student =  get_student(studentid)
@@ -42,6 +44,7 @@ def search_student_action(studentid):
 
 
 @student_views.route('/student', methods=['POST'])
+@jwt_required()
 def create_student_action():
     try:
         data = request.form
@@ -51,6 +54,7 @@ def create_student_action():
         return jsonify(message='Invalid Id or email!'),401
     
 @student_views.route('/updatestudent', methods=['POST'])
+@jwt_required()
 def update_student_action():
     try:
         data = request.form
@@ -61,6 +65,7 @@ def update_student_action():
         return jsonify(message='Unable to update Student!'),401
     
 @student_views.route('/student/<int:id>/review', methods=['GET'])
+@jwt_required()
 def student_review_action(id):
     try:
         reviews = getRatedReviews(id)

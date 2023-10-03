@@ -7,6 +7,7 @@ from App.controllers import(addReview)
 review_views = Blueprint('review_views', __name__, template_folder='../templates')
 
 @review_views.route('/review', methods=['POST'])
+@jwt_required()
 def create_review_action():
     try:
         data = request.form

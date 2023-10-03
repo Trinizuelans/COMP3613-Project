@@ -7,7 +7,9 @@ vote_views = Blueprint('vote_views', __name__, template_folder='../templates')
 
 
 @vote_views.route('/upvote', methods=['POST'])
+@jwt_required()
 def create_upvote_action():
+    
     try:
         data = request.form
         reviewId = data['reviewId']
@@ -30,6 +32,7 @@ def create_upvote_action():
     
 
 @vote_views.route('/downvote', methods=['POST'])
+@jwt_required()
 def create_downvote_action():
     try:
         data = request.form
