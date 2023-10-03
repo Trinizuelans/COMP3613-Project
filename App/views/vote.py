@@ -15,12 +15,9 @@ def create_upvote_action():
         reviewId = data['reviewId']
         voterId = data['voterId']
         review = getReview(reviewId)
-        print(review)
         rating = review.votes[0].rating
-        print(rating)
-        #print( validateReviewVotes(reviewId,voterId))
         if checkDuplicateVotes(reviewId,voterId):
-            return jsonify(message='Error: Staff cannot vote twice!'),402
+            return jsonify(error='Staff cannot vote twice!'),402
 
         vote = addVote(data['voterId'],data['reviewId'],rating,upvote=True)
         print(addVote)
@@ -28,7 +25,7 @@ def create_upvote_action():
         return jsonify(message='Upvote Successful!'), 200
     
     except Exception:
-        return jsonify(message='Error: Upvote Unsuccessful!'), 401
+        return jsonify(error='Upvote Unsuccessful!'), 401
     
 
 @vote_views.route('/downvote', methods=['POST'])
@@ -41,17 +38,15 @@ def create_downvote_action():
         rating = int(data['rating'])
 
         if checkDuplicateVotes(reviewId,voterId):
-            return jsonify(message='Error: Staff cannot vote twice!'),402
+            return jsonify(error='Staff cannot vote twice!'),402
 
         review = getReview(reviewId)
         c_rating = review.votes[0].rating
         print(c_rating)
         v = validateDownvoteRating(c_rating,rating)
-        
-        print(v)
 
         if v == False:
-           return jsonify(message='Rating out of range or equal to review creator rating'), 401
+           return jsonify(error='Rating out of range or equal to review creator rating'), 401
         
         else: 
            vote = addVote(voterId,reviewId,rating,upvote=False)
@@ -60,4 +55,4 @@ def create_downvote_action():
         
     
     except Exception:
-        return jsonify(message='Error: Downvote Unsuccessful!'), 401
+        return jsonify(error=' Downvote Unsuccessful!'), 401
