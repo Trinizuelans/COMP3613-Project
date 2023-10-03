@@ -24,19 +24,19 @@ def get_all_students_json():
 
 def update_student_year(id, year):
     student = get_student(id)
-    print(student.toJSON())
+    # print(student.toJSON())
     student.year = year
-    print(student.toJSON())
+    # print(student.toJSON())
 
 def update_student_programme(id, prog):
     student = get_student(id)
-    print(student.toJSON())
+    # print(student.toJSON())
     student.programme = prog
-    print(student.toJSON())
+    # print(student.toJSON())
 
 def update_student(id, firstname, lastname, email, year, prog):
     student = get_student(id)
-    print(student.toJSON())
+    # print(student.toJSON())
     student.firstName = firstname
     student.lastName = lastname
     student.email = email
@@ -44,7 +44,7 @@ def update_student(id, firstname, lastname, email, year, prog):
     student.programme = prog
     db.session.add(student)
     db.session.commit()
-    print(student.toJSON())
+    # print(student.toJSON())
 
 
 
