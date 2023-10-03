@@ -10,7 +10,10 @@ from App.controllers import (
     get_all_users,
     get_all_users_json,
     jwt_required,
-    get_all_staff_json
+    login,
+    login_user,
+    get_all_staff_json,
+    addStaff
 )
 
 
@@ -28,5 +31,46 @@ def staff_login_api():
   token = jwt_authenticate(data['id'], data['password'])
   
   if not token:
-    return jsonify(message='bad username or password given'), 401
+    return jsonify(message='bad id or password given'), 401
   return jsonify(access_token=token)
+
+@staff_views.route('/staff/signup', methods=['POST'])
+def signup_action():
+  try:
+    data = request.form  # get data from form submission
+    staff = addStaff(id = data['id'],firstName=data['firstName'],lastName=data['lastName'],email=data['email'],password=data['password'])
+    
+    if not staff:
+        return jsonify(message='bad id or password given'), 401
+    return jsonify(message="Staff account created!")
+
+  except Exception:  # attempted to insert a duplicate user
+    return jsonify(message='Staff account with id or email already exists!')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# @staff_views.route('/loginstaff', methods=['POST'])
+# def login_action():
+#     data = request.form
+#     user = login(data['id'], data['password'])
+#     if user:
+#         login_user(user)
+#         return 'Staff logged in!'
+#     return 'bad id or password given', 401
+
+# @staff_views.route('/logout', methods=['GET'])
+# def logout_action():
+#     data = request.form
+#     user = login(data['id'], data['password'])
+#     return 'Staff logged out!'
