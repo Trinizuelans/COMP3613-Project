@@ -21,3 +21,12 @@ staff_views = Blueprint('staff_views', __name__, template_folder='../templates')
 def get_users_action():
     users = get_all_staff_json()
     return jsonify(users)
+
+@staff_views.route('/staff/login', methods=['POST'])
+def staff_login_api():
+  data = request.form
+  token = jwt_authenticate(data['id'], data['password'])
+  
+  if not token:
+    return jsonify(message='bad username or password given'), 401
+  return jsonify(access_token=token)
