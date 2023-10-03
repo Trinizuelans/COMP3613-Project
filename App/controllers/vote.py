@@ -63,3 +63,11 @@ def validateDownvoteRating(c_rating,rating):
         if  rating != c_rating:
             return True
     return False
+
+def checkDuplicateVotes(reviewId,voterId):
+    vote = Vote.query.filter_by(reviewId = reviewId, voterId = voterId).first()
+    print(vote)
+    if vote:
+        return True
+    
+    return False
