@@ -25,7 +25,7 @@ def getTotalScore(reviewId):
     sum = 0   
     for vote in votes:
         sum = sum + vote.rating
-    return sum
+    return float(sum)
 
 def getNumVotes(reviewId):
     votes = getVotesByReviewId(reviewId)
@@ -36,7 +36,8 @@ def calcAvgReviewScore(reviewId):
     voters = getNumVotes(reviewId)
     if voters == 0:
         return 0
-    return (score/voters)
+    result = score/voters
+    return (float(result))
 
 def calcUpvotes(reviewId):
     votes = Vote.query.filter_by(reviewId = reviewId, upvote = True).all()

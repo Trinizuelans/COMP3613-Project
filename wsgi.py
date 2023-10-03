@@ -34,10 +34,10 @@ def initialize():
     newVote = addVote(735,2,3, False)
     addvote = addReviewVotes(2)
     newReview1.score = calcAvgReviewScore(newReview1.reviewId)
-    print(newReview1.score)
-
+    # print(newReview1.score)
+    print(student)
     reviews = getAllReviews_JSON()
-    print(reviews)
+    # print(reviews)
     print('database intialized')
 
 '''

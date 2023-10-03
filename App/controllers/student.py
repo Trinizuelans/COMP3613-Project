@@ -47,11 +47,11 @@ def update_student(id, firstname, lastname, email, year, prog):
     # print(student.toJSON())
 
 
-
 def getRatedReviews(id):
     student = get_student(id)
     student.reviews = review.getReviewByStudent(student.id)
-    print (student.reviews)
+    db.session.add(student)
+    db.session.commit()
     return student.reviews
 
 def calcKarma(id):
@@ -60,7 +60,7 @@ def calcKarma(id):
      for rev in student.reviews:
         sum = sum + rev.score
      student.karma = sum/len(student.reviews)
-     print(student)
+    
      return student.karma
 
 def determineStanding (id):
@@ -71,5 +71,14 @@ def determineStanding (id):
       student.standing = "Neutral"
     else:
       student.standing = "Liked"
-    print(student)
     return student.standing
+
+
+def updateStudentStatistics(id):
+    student = get_student(id)
+    karma = calcKarma(id)
+    standing = determineStanding(id)
+    student.karma = karma
+    student.standing = standing
+    db.session.add(student)
+    db.session.commit()

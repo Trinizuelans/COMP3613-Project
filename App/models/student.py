@@ -21,17 +21,22 @@ class Student (User):
         self.lastName = lastName
         self.email = email
         self.year = year
+        self.reviews = []
         self.programme = programme
 
     def __repr__(self):
-        return f'<Student {self.id} {self.firstName} {self.lastName} {self.email} {self.year} {self.programme} {self.karma} {self.standing}>'
+        return f'<Student {self.id} {self.firstName} {self.lastName} {self.email} {self.year} {self.reviews} {self.programme} {self.karma} {self.standing}>'
 
     def toJSON(self):
+        import App.controllers.review as rev
         return{
             'studentId': self.id,
             'firstName': self.firstName,
             'lastName':self.lastName,
             'email': self.email,
             'year': self.year,
+            'reviews': rev.getAllStudentReviews_JSON(self.id),
+            'karma': self.karma,
+            'standing': self.standing,
             'programme': self.programme
         }

@@ -1,5 +1,6 @@
 from App.models import Review
 import App.controllers.vote as vote
+import App.controllers.student as stu
 from App.database import db
 
 def addReview(creatorId,studentId,semesterId,comment,score):
@@ -39,6 +40,7 @@ def getReviewsByCreator(creatorId):
 def addReviewVotes(reviewId):
     votes = vote.getVotesByReviewId(reviewId)
     review = getReview(reviewId)
+
     if review:
         review.votes = votes
         review.score = vote.calcAvgReviewScore(review.reviewId)
@@ -52,6 +54,9 @@ def addReviewVotes(reviewId):
 
         db.session.add(review)
         db.session.commit()
+
+        stu.updateStudentStatistics(review.studentId)
+
         return review
     
 def getAllReviews_JSON():
@@ -63,6 +68,13 @@ def getAllReviews_JSON():
 
 def getAllCreatorReviews_JSON(creatorId):
     reviews = getReviewsByCreator(creatorId)
+    if not reviews:
+        return []
+    reviews = [review.toJSON()for review in reviews]
+    return reviews
+
+def getAllStudentReviews_JSON(studentId):
+    reviews = getReviewByStudent(studentId)
     if not reviews:
         return []
     reviews = [review.toJSON()for review in reviews]
