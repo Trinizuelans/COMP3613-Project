@@ -50,7 +50,6 @@ def signup_action():
     return jsonify(message="Staff account created!")
 
   except Exception:  # attempted to insert a duplicate user
-    db.session.rollback()
     return jsonify(error='Staff account with id or email already exists!')
 
 @staff_views.route('/staff/login', methods=['POST'])

@@ -4,10 +4,14 @@ from App.database import db
 # adds a new staff memeber
 
 def addStaff (id,firstName,lastName,email,password):
-    newStaff = Staff(id = id,firstName = firstName,lastName = lastName,email = email, password = password)
-    db.session.add(newStaff)
-    db.session.commit()
-    return newStaff
+    try:
+        newStaff = Staff(id = id,firstName = firstName,lastName = lastName,email = email, password = password)
+        db.session.add(newStaff)
+        db.session.commit()
+        return newStaff
+    
+    except Exception:
+        db.session.rollback()
 
 # gets a staff memeber with specified id
 
