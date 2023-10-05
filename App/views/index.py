@@ -33,6 +33,11 @@ def init():
     newReview1.score = calcAvgReviewScore(newReview1.reviewId)
     return jsonify(message='db initialized!')
 
+@index_views.route('/init', methods=['GET'])
+def delete():
+    db.drop_all()
+    return jsonify(message='db reset!')
+
 @index_views.route('/health', methods=['GET'])
 def health_check():
     return jsonify({'status':'healthy'})
