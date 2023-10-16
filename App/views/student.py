@@ -72,5 +72,5 @@ def student_review_action(id):
         return jsonify(getReviewsByStudent_JSON(id)),200
 
     except Exception: 
-        return jsonify(error='Unable to get student reviews!'),40
+        return jsonify(error='Unable to get student reviews!'),400
 
