@@ -17,12 +17,12 @@ def create_upvote_action():
         review = getReview(reviewId)
         rating = review.votes[0].rating
         if checkDuplicateVotes(reviewId,voterId):
-            return jsonify(error='Staff cannot vote twice!'),402
+            return jsonify(error='Staff cannot vote twice!'),401
 
         vote = addVote(data['voterId'],data['reviewId'],rating,upvote=True)
         print(addVote)
         review = addReviewVotes(reviewId)
-        return jsonify(message='Upvote Successful!'), 200
+        return jsonify(message='Upvote Successful!'), 201
     
     except Exception:
         return jsonify(error='Upvote Unsuccessful!'), 401

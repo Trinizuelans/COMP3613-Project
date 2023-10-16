@@ -47,7 +47,7 @@ def signup_action():
     
     if not staff:
         return jsonify(error='bad id or password given'), 401
-    return jsonify(message="Staff account created!")
+    return jsonify(message="Staff account created!"), 201
 
   except Exception:  # attempted to insert a duplicate user
     return jsonify(error='Staff account with id or email already exists!')
