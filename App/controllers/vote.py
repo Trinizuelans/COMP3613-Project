@@ -4,10 +4,13 @@ from App.database import db
 # adds a vote to a specific review 
 
 def addVote(voterId,reviewId,rating,upvote = None):
-    newVote = Vote(voterId=voterId,reviewId=reviewId,rating=rating, upvote = upvote)
-    db.session.add(newVote)
-    db.session.commit()
-    return newVote
+    try:
+        newVote = Vote(voterId=voterId,reviewId=reviewId,rating=rating, upvote = upvote)
+        db.session.add(newVote)
+        db.session.commit()
+        return newVote
+    except Exception:
+        db.session.rollback()
 
 # gets a specifc vote 
 
@@ -68,13 +71,16 @@ def calcDownvotes(reviewId):
 # updates a rating of a specific vote
 
 def updateVote(voteId,rating,upvote):
-    vote = getVote(voteId)
-    if vote:
-        vote.rating = rating
-        vote.upvote = upvote
-        db.session.add(vote)
-        db.session.commit()
-    return vote
+    try:
+        vote = getVote(voteId)
+        if vote:
+            vote.rating = rating
+            vote.upvote = upvote
+            db.session.add(vote)
+            db.session.commit()
+        return vote
+    except Exception:
+        db.session.rollback()
 
 # checks wether rating is within range ie -3 to 3 and ensure it's not equal to the creator's rating
 

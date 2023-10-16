@@ -6,29 +6,33 @@ from App.database import db
 # logs a review 
 
 def addReview(creatorId,studentId,semesterId,comment,score):
+    try:
+        #create a new review and commit it to generate a review ID
 
-    #create a new review and commit it to generate a review ID
+        newReview = Review(creatorId=creatorId,studentId=studentId,semesterId=semesterId,comment=comment,score=0)
+        db.session.add(newReview) 
+        db.session.commit()
 
-    newReview = Review(creatorId=creatorId,studentId=studentId,semesterId=semesterId,comment=comment,score=0)
-    db.session.add(newReview) 
-    db.session.commit()
+        #create a vote for the creator of the review i.e rating from -3 to 3
 
-    #create a vote for the creator of the review i.e rating from -3 to 3
+        v = vote.addVote(creatorId,newReview.reviewId,score)
 
-    v = vote.addVote(creatorId,newReview.reviewId,score)
+        #take the vote of the creator of the review and assign it to 0 postion of the votes [] in review
 
-    #take the vote of the creator of the review and assign it to 0 postion of the votes [] in review
+        newReview = addReviewVotes(newReview.reviewId)
 
-    newReview = addReviewVotes(newReview.reviewId)
+        #calculates score of the review after, NB: Only the 1 vote is present atm which is creator vote
 
-    #calculates score of the review after, NB: Only the 1 vote is present atm which is creator vote
+        newReview.score = vote.calcAvgReviewScore(newReview.reviewId)
 
-    newReview.score = vote.calcAvgReviewScore(newReview.reviewId)
+        db.session.add(newReview)
+        db.session.commit()
+    
+        return newReview
 
-    db.session.add(newReview)
-    db.session.commit()
-  
-    return newReview
+    except Exception:
+        db.session.rollback()
+
 
 # gets first review matching the specified reviewID
 
@@ -57,26 +61,30 @@ def getReviewsByCreator(creatorId):
 # adds all the votes of a review, finds the review score, updates the number of upvotes, downvotes and votedifference
 
 def addReviewVotes(reviewId):
-    votes = vote.getVotesByReviewId(reviewId)
-    review = getReview(reviewId)
+    try:
+        votes = vote.getVotesByReviewId(reviewId)
+        review = getReview(reviewId)
 
-    if review:
-        review.votes = votes
-        review.score = vote.calcAvgReviewScore(review.reviewId)
-        upvote = vote.calcUpvotes(reviewId)
-        downvote = vote.calcDownvotes(reviewId)
-        votedifference = upvote - downvote
+        if review:
+            review.votes = votes
+            review.score = vote.calcAvgReviewScore(review.reviewId)
+            upvote = vote.calcUpvotes(reviewId)
+            downvote = vote.calcDownvotes(reviewId)
+            votedifference = upvote - downvote
 
-        review.upvote = upvote
-        review.downvote = downvote
-        review.votebalance = votedifference
+            review.upvote = upvote
+            review.downvote = downvote
+            review.votebalance = votedifference
 
-        db.session.add(review)
-        db.session.commit()
+            db.session.add(review)
+            db.session.commit()
 
-        stu.updateStudentStatistics(review.studentId)
+            stu.updateStudentStatistics(review.studentId)
 
-        return review
+            return review
+        
+    except Exception:
+        db.session.rollback()
 
 # gets all the reviews
     
@@ -108,11 +116,16 @@ def getAllStudentReviews_JSON(studentId):
 # updates the review score after another staff memeber casts a vote
 
 def updateReviewScore(reviewId):
-    review  = getReview(reviewId)
-    score = vote.calcAvgReviewScore(reviewId)
-    review.score = score
-    db.session.add(review)
-    db.session.commit()
+    try:
+        review  = getReview(reviewId)
+        score = vote.calcAvgReviewScore(reviewId)
+        review.score = score
+        db.session.add(review)
+        db.session.commit()
+    
+    except Exception:
+        db.session.rollback()
+
 
 #checks existing upvotes and downvotes for double votes
 def validateReviewVotes(reviewId,voterId):

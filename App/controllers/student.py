@@ -5,11 +5,15 @@ import App.controllers.review as review
 # adds a new student 
 
 def addStudent (id,firstName,lastName,email,year,programme):
-    newStudent = Student(id = id,firstName = firstName,lastName = lastName,email = email,year = year,programme = programme)
-    db.session.add(newStudent)
-    db.session.commit()
-    updateStudentStatistics(newStudent.id)
-    return newStudent
+    try:
+        newStudent = Student(id = id,firstName = firstName,lastName = lastName,email = email,year = year,programme = programme)
+        db.session.add(newStudent)
+        db.session.commit()
+        updateStudentStatistics(newStudent.id)
+        return newStudent
+    except Exception:
+        db.session.rollback()
+
 
 # gets a student with specified id
 
@@ -51,23 +55,30 @@ def update_student_programme(id, prog):
  # updates all aspects of a specified student 
 
 def update_student(id, firstname, lastname, email, year, prog):
-    student = get_student(id)
-    student.firstName = firstname
-    student.lastName = lastname
-    student.email = email
-    student.year = year
-    student.programme = prog
-    db.session.add(student)
-    db.session.commit()
+    try:
+        student = get_student(id)
+        student.firstName = firstname
+        student.lastName = lastname
+        student.email = email
+        student.year = year
+        student.programme = prog
+        db.session.add(student)
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
+
 
 # gets the rated reviews of a specified student
 
 def getRatedReviews(id):
-    student = get_student(id)
-    student.reviews = review.getReviewByStudent(student.id)
-    db.session.add(student)
-    db.session.commit()
-    return student.reviews
+    try:
+        student = get_student(id)
+        student.reviews = review.getReviewByStudent(student.id)
+        db.session.add(student)
+        db.session.commit()
+        return student.reviews
+    except Exception:
+        db.session.rollback()
 
 # calculates the karma of a specified student
 
@@ -106,10 +117,13 @@ def determineStanding (id):
 # updates the specfied student karma and standing after vote is casted 
 
 def updateStudentStatistics(id):
-    student = get_student(id)
-    karma = calcKarma(id)
-    standing = determineStanding(id)
-    student.karma = karma
-    student.standing = standing
-    db.session.add(student)
-    db.session.commit()
+    try:
+        student = get_student(id)
+        karma = calcKarma(id)
+        standing = determineStanding(id)
+        student.karma = karma
+        student.standing = standing
+        db.session.add(student)
+        db.session.commit()
+    except Exception:
+        db.session.rollback()
