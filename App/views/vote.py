@@ -38,7 +38,7 @@ def create_downvote_action():
         rating = int(data['rating'])
 
         if checkDuplicateVotes(reviewId,voterId):
-            return jsonify(error='Staff cannot vote twice!'),402
+            return jsonify(error='Staff cannot vote twice!'),401
 
         review = getReview(reviewId)
         c_rating = review.votes[0].rating
