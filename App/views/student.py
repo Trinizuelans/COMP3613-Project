@@ -48,7 +48,11 @@ def search_student_action(studentid):
 def create_student_action():
     try:
         data = request.form
-        addStudent(data['id'], data['firstname'], data['lastname'], data['email'], data['year'],data['programme'])
+        newStudent= addStudent(data['id'], data['firstname'], data['lastname'], data['email'], data['year'],data['programme'])
+        
+        if newStudent is None:
+            return jsonify(error='Invalid Id or email!'),401
+        
         return jsonify(message='Student created!'),201
     except Exception: 
         return jsonify(error='Invalid Id or email!'),401
