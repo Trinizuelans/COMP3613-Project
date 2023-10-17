@@ -64,6 +64,7 @@ def update_student(id, firstname, lastname, email, year, prog):
         student.programme = prog
         db.session.add(student)
         db.session.commit()
+        return student
     except Exception:
         db.session.rollback()
 

@@ -12,7 +12,7 @@ def create_review_action():
     try:
         data = request.form
         review = addReview(data['id'],data['studentId'],data['semesterId'],data['comment'],data['score'])
-        if not review:
+        if review is None:
             return jsonify(error='Review was unable to be created!'), 401
         return jsonify(message='Review created!'), 201
     except Exception:

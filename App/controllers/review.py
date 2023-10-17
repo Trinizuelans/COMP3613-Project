@@ -32,6 +32,7 @@ def addReview(creatorId,studentId,semesterId,comment,score):
 
     except Exception:
         db.session.rollback()
+        db.session.rollback()
 
 
 # gets first review matching the specified reviewID

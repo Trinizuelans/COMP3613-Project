@@ -51,7 +51,11 @@ def create_downvote_action():
         else: 
            vote = addVote(voterId,reviewId,rating,upvote=False)
            review = addReviewVotes(reviewId)
-           return jsonify(message='Downvote Successful!'), 200
+
+           if vote is None or review is None:
+                return jsonify(error=' Downvote Unsuccessful!'), 401
+
+           return jsonify(message='Downvote Successful!'), 201
         
     
     except Exception:
