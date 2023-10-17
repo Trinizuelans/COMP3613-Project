@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, jsonify, request, send_from_directory, flash, redirect, url_for
 from flask_jwt_extended import jwt_required, current_user as jwt_current_user
 from flask_login import current_user, login_required
-from App.controllers import getReview,addVote,addReviewVotes,validateReviewVotes,validateDownvoteRating,checkDuplicateVotes
+from App.controllers import getReview,addVote,addReviewVotes,validateReviewVotes,get_staff,validateDownvoteRating,checkDuplicateVotes
 vote_views = Blueprint('vote_views', __name__, template_folder='../templates')
 
 
@@ -16,12 +16,20 @@ def create_upvote_action():
         voterId = data['voterId']
         review = getReview(reviewId)
         rating = review.votes[0].rating
+
+        staff = get_staff(voterId)
+
+        if staff is None:
+            return jsonify(error='Upvote Unsuccessful!'), 401
+
         if checkDuplicateVotes(reviewId,voterId):
             return jsonify(error='Staff cannot vote twice!'),401
 
         vote = addVote(data['voterId'],data['reviewId'],rating,upvote=True)
-        print(addVote)
         review = addReviewVotes(reviewId)
+        if vote is None or review is None:
+                return jsonify(error=' Upvote Unsuccessful!'), 401
+
         return jsonify(message='Upvote Successful!'), 201
     
     except Exception:
@@ -36,6 +44,11 @@ def create_downvote_action():
         reviewId = data['reviewId']
         voterId = data['voterId']
         rating = int(data['rating'])
+
+        staff = get_staff(voterId)
+
+        if staff is None:
+            return jsonify(error='Downvote Unsuccessful!'), 401
 
         if checkDuplicateVotes(reviewId,voterId):
             return jsonify(error='Staff cannot vote twice!'),401
