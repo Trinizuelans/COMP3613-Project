@@ -1,15 +1,19 @@
 from App.models import Review
 import App.controllers.vote as vote
 import App.controllers.student as stu
+import App.controllers.semester as sem
 from App.database import db
 
 # logs a review 
 
-def addReview(creatorId,studentId,semesterId,comment,score):
+def addReview(creatorId,studentId,comment,score,semesterId = None):
     try:
         #create a new review and commit it to generate a review ID
-
-        newReview = Review(creatorId=creatorId,studentId=studentId,semesterId=semesterId,comment=comment,score=0)
+        if semesterId is None:
+            semesterId = sem.assignSemester()
+            if semesterId is None: # in event review creation date does not belong to any semester
+                semesterId = None
+        newReview = Review(creatorId=creatorId,studentId=studentId,comment=comment,score=0, semesterId=semesterId)
         db.session.add(newReview) 
         db.session.commit()
 

@@ -6,11 +6,13 @@ import App.controllers.review as review
 
 def addStudent (id,firstName,lastName,email,year,programme):
     try:
-        newStudent = Student(id = id,firstName = firstName,lastName = lastName,email = email,year = year,programme = programme)
-        db.session.add(newStudent)
-        db.session.commit()
-        updateStudentStatistics(newStudent.id)
-        return newStudent
+        if get_student(id) is None:
+            newStudent = Student(id = id,firstName = firstName,lastName = lastName,email = email,year = year,programme = programme)
+            db.session.add(newStudent)
+            db.session.commit()
+            updateStudentStatistics(newStudent.id)
+            return newStudent
+        return None
     except Exception:
         db.session.rollback()
 

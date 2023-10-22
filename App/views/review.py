@@ -11,7 +11,7 @@ review_views = Blueprint('review_views', __name__, template_folder='../templates
 def create_review_action():
     try:
         data = request.form
-        review = addReview(data['id'],data['studentId'],data['semesterId'],data['comment'],data['score'])
+        review = addReview(data['id'],data['studentId'],data['comment'],data['score'])
         if review is None:
             return jsonify(error='Review was unable to be created!'), 401
         return jsonify(message='Review created!'), 201

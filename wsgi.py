@@ -6,7 +6,8 @@ from App.database import db, get_migrate
 from App.main import create_app
 from App.controllers import ( create_user, get_all_users_json, get_all_users )
 from App.controllers import(update_student_year, update_student_programme,calcAvgReviewScore,getRatedReviews,calcKarma,determineStanding,get_all_students_json)
-from App.controllers import(addStudent,addStaff,addSemester,addReview,addVote,addReviewVotes,getAllReviews_JSON)
+from App.controllers import(addStudent,addDownVote, assignSemester,addStaff,addSemester,addReview,addVote,addReviewVotes,getAllReviews_JSON)
+from App.models import SemNum
 from datetime import date
 
 # This commands file allow you to create convenient CLI commands for testing controllers
@@ -22,22 +23,25 @@ def initialize():
     staff = addStaff(735,"John","Doe","john.doe@sta.uwi.edu","johnpass")
     staff = addStaff(738,"Bob","Doe","bob.doe@sta.uwi.edu","bobpass")
     student = addStudent(816,"Sally","Shell","sally.shell@my.uwi.edu",2,"BSc Computer Science (Special)")
-    newSemester = addSemester("SEM1",2023,date(2023,8,25),date(2023,12,25))
+    newSemester = addSemester(SemNum.SEM1,2023,date(2023,8,25),date(2023,12,25))
+    newSemester2 = addSemester(SemNum.SEM2,2024,date(2024,1,21),date(2024,5,10))
+    summer  = addSemester(SemNum.SEM3,2024,date(2024,5,19),date(2024,7,26))
 
-    newReview = addReview(735,816,1,"Sally sleeps in every class of mine!",-1)
+    newReview = addReview(735,816,"Sally sleeps in every class of mine!",-1)
     newVote = addVote(738,1,2,False)
+
     addvote = addReviewVotes(1)
     newReview.score = calcAvgReviewScore(newReview.reviewId)
-    
 
-    newReview1 = addReview(738,816,1,"Sally is a bad student!",-2)
-    newVote = addVote(735,2,3, False)
+    newReview1 = addReview(738,816,"Sally is a bad student!",-2)
+    # newVote = addVote(735,2,3, False) 
+    newVote = addDownVote(735,2,3)
+    newVote = addDownVote(735,2,3)
     addvote = addReviewVotes(2)
     newReview1.score = calcAvgReviewScore(newReview1.reviewId)
-    # print(newReview1.score)
-    #print(student)
+ 
     reviews = getAllReviews_JSON()
-    # print(reviews)
+
     print('database intialized')
 
 '''

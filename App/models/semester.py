@@ -21,12 +21,12 @@ class Semester(db.Model):
             self.semEnd = semEnd
 
     def __repr__(self):
-        return f'<Semester {self.semesterId} {self.semesterName} {self.year}{self.semStart} {self.semEnd}>'
+        return f'<Semester {self.semesterId} {self.semesterName.value} {self.year}{self.semStart} {self.semEnd}>'
 
     def toJSON(self):
             return{
                 'semesterId': self.semesterId,
-                'semesterName': self.semesterName,
+                'semesterName': self.semesterName.value,
                 'year': self.year,
                 'semStart': self.semStart,
                 'semEnd': self.semEnd

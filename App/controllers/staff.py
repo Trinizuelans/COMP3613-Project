@@ -5,10 +5,12 @@ from App.database import db
 
 def addStaff (id,firstName,lastName,email,password):
     try:
-        newStaff = Staff(id = id,firstName = firstName,lastName = lastName,email = email, password = password)
-        db.session.add(newStaff)
-        db.session.commit()
-        return newStaff
+        if get_staff(id) is None:
+            newStaff = Staff(id = id,firstName = firstName,lastName = lastName,email = email, password = password)
+            db.session.add(newStaff)
+            db.session.commit()
+            return newStaff
+        return None
     
     except Exception:
         db.session.rollback()
@@ -17,6 +19,9 @@ def addStaff (id,firstName,lastName,email,password):
 
 def get_staff(id):
     return Staff.query.filter_by(id = id).first()
+
+def get_staff_JSON(id):
+    return Staff.query.filter_by(id = id).first().toJSON()
 
 # gets all the staff memebers 
 

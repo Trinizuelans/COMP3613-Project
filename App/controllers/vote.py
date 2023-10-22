@@ -1,6 +1,9 @@
 from App.models import Vote
 from App.database import db
 
+import App.controllers.review as r
+import App.controllers.staff as s
+
 # adds a vote to a specific review 
 
 def addVote(voterId,reviewId,rating,upvote = None):
@@ -73,7 +76,6 @@ def calcDownvotes(reviewId):
 def updateVote(voteId,rating,upvote):
     try:
         vote = getVote(voteId)
-        print(vote)
         if vote:
             vote.rating = rating
             vote.upvote = upvote
@@ -95,8 +97,49 @@ def validateDownvoteRating(c_rating,rating):
 
 def checkDuplicateVotes(reviewId,voterId):
     vote = Vote.query.filter_by(reviewId = reviewId, voterId = voterId).first()
-    print(vote)
     if vote:
         return True
     
     return False
+
+def addUpvote(voterId,reviewId):
+    review = r.getReview(reviewId)
+    staff = s.get_staff(voterId)
+
+    if staff is None:
+        return None
+    
+    if review is None:
+        return None
+    
+    if checkDuplicateVotes(reviewId,voterId):
+        return None
+    
+    rating = review.votes[0].rating #Creator of the review is always in location 0 of the vote list
+    vote = addVote(voterId,reviewId,rating,True)
+    review = r.addReviewVotes(reviewId)
+
+    return vote
+
+def addDownVote(voterId,reviewId,rating):
+    review = r.getReview(reviewId)
+    staff = s.get_staff(voterId)
+    
+    if staff is None:
+        return None
+    
+    if review is None:
+        return None
+    
+    if checkDuplicateVotes(reviewId,voterId):
+        return "Duplicate"
+    
+    c_rating = review.votes[0].rating
+    v = validateDownvoteRating(c_rating,rating)
+    if v ==False:
+        return "Invalid"
+    
+    vote = addVote(voterId,reviewId,rating,False)
+    review = r.addReviewVotes(reviewId)
+    return vote
+
