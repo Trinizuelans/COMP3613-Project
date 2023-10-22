@@ -3,7 +3,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from App.main import create_app
 from App.database import db, create_db
-from App.models import User
+from App.models import User,Faculty
 from App.controllers import (
     create_user,
     get_all_users_json,
@@ -22,7 +22,8 @@ from App.controllers import (
     getReview,
     updateVote,
     addDownVote,
-    addUpvote
+    addUpvote,
+    format_faculty
 )
 
 
@@ -108,9 +109,10 @@ class StudentIntegrationTests(unittest.TestCase):
         email = "ally@mail.com"
         year = 3
         programme = "Computer Science (General)"
+        faculty = "FST"
+        f = format_faculty(faculty)
 
-
-        new_student = addStudent (studentId,firstName,lastName,email,year,programme)
+        new_student = addStudent (studentId,firstName,lastName,email,year,programme,"FST")
 
         assert new_student is not None, "Student creation failed."
         assert new_student.firstName == firstName, f"Expected firstName: {firstName}, Actual: {new_student.firstName}"
@@ -118,6 +120,7 @@ class StudentIntegrationTests(unittest.TestCase):
         assert new_student.email == email, f"Expected email: {email}, Actual: {new_student.email}"
         assert new_student.year == year, f"Expected year: {year}, Actual: {new_student.year}"
         assert new_student.programme == programme, f"Expected email: {programme}, Actual: {new_student.programme}"
+        assert new_student.faculty == f, f"Expected faculty: {f}, Actual: {new_student.faculty}"
 
     def testB_search_student(self):
         studentId = 817

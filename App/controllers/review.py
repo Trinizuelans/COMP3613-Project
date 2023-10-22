@@ -1,6 +1,7 @@
 from App.models import Review
 import App.controllers.vote as vote
 import App.controllers.student as stu
+import App.controllers.staff as s
 import App.controllers.semester as sem
 from App.database import db
 
@@ -9,10 +10,13 @@ from App.database import db
 def addReview(creatorId,studentId,comment,score,semesterId = None):
     try:
         #create a new review and commit it to generate a review ID
-        if semesterId is None:
-            semesterId = sem.assignSemester()
-            if semesterId is None: # in event review creation date does not belong to any semester
-                semesterId = None
+        result = validateAddReviewData(creatorId,studentId,semesterId)
+
+        if result is None:
+            return None
+        
+        semesterId = result
+
         newReview = Review(creatorId=creatorId,studentId=studentId,comment=comment,score=0, semesterId=semesterId)
         db.session.add(newReview) 
         db.session.commit()
@@ -38,6 +42,19 @@ def addReview(creatorId,studentId,comment,score,semesterId = None):
         db.session.rollback()
         db.session.rollback()
 
+def validateAddReviewData(creatorId,studentId,semesterId):
+        if semesterId is None:
+            semesterId = sem.assignSemester()
+            if semesterId is None: # in event review creation date does not belong to any semester
+                semesterId = None
+
+        if s.get_staff(creatorId) is None:
+            return None
+        
+        if stu.get_student(studentId) is None:
+            return None
+        
+        return semesterId
 
 # gets first review matching the specified reviewID
 

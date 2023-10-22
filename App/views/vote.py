@@ -48,9 +48,9 @@ def create_downvote_action():
         rating = int(data['rating'])
 
         # staff = get_staff(voterId)
-
         # if staff is None:
         #     return jsonify(error='Downvote Unsuccessful!'), 401
+        
         vote = addDownVote(voterId,reviewId,rating)
 
         if vote == "Duplicate":

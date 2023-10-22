@@ -18,7 +18,7 @@ def addStaff (id,firstName,lastName,email,password):
 # gets a staff memeber with specified id
 
 def get_staff(id):
-    return Staff.query.filter_by(id = id).first()
+        return Staff.query.filter_by(id = id).first()
 
 def get_staff_JSON(id):
     return Staff.query.filter_by(id = id).first().toJSON()

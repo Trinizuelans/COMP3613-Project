@@ -2,10 +2,16 @@ from App.database import db
 from .user import *
 import enum
 
-# class Standing (enum.Enum):
-#     NEUTRAL = "Neutral"
-#     EXCELLENT = "Excellent"
-    #need more categories for this
+class Faculty (enum.Enum):
+    FST = "Faculty of Science and Technology"
+    FSS = "Faculty of Social Sciences"
+    FFA = "Faculty of Food and Agriculture"
+    FOL = "Faculty of Law"
+    FMS = "Faculty of Medical Sciences"
+    FOE = "Faculty of Engineering"
+    FHE = "Faculty of Humanitites and Education"
+    FOS = "Faculty of Sport"
+
 
 class Student (User):
     year = db.Column(db.Integer)
@@ -13,9 +19,11 @@ class Student (User):
     reviews = db.relationship('Review',backref = db.backref('student',lazy = 'joined'))
     karma = db.Column(db.Numeric(precision=10, scale=2), default = 0)
     standing = db.Column(db.String(120), nullable = False, default = "NULL")
+    faculty = db.Column(db.Enum(Faculty), nullable = False)
 
+    def __init__(self,id,firstName,lastName,email,year,programme,faculty):
+        from App.controllers.student import format_faculty
 
-    def __init__(self,id,firstName,lastName,email,year,programme):
         self.id = id
         self.firstName = firstName 
         self.lastName = lastName
@@ -23,9 +31,10 @@ class Student (User):
         self.year = year
         self.reviews = []
         self.programme = programme
+        self.faculty = format_faculty(faculty)
 
     def __repr__(self):
-        return f'<Student {self.id} {self.firstName} {self.lastName} {self.email} {self.year} {self.reviews} {self.programme} {self.karma} {self.standing}>'
+        return f'<Student {self.id} {self.firstName} {self.lastName} {self.email} {self.year} {self.reviews} {self.programme} {self.karma} {self.standing} {self.faculty.value}>'
 
     def toJSON(self):
         import App.controllers.review as rev
@@ -38,5 +47,7 @@ class Student (User):
             'reviews': rev.getAllStudentReviews_JSON(self.id),
             'karma': self.karma,
             'standing': self.standing,
-            'programme': self.programme
+            'programme': self.programme,
+            'faculty': self.faculty.value
+
         }

@@ -1,5 +1,5 @@
 from flask import Blueprint, redirect, render_template, request, send_from_directory, jsonify
-from App.models import db, SemNum
+from App.models import db, SemNum,Faculty
 from App.controllers import *
 from datetime import date
 
@@ -18,7 +18,7 @@ def init():
     addStaff(101,'bob',"Frank","bobfrank@sta.uwi.edu", 'bobpass')
     staff = addStaff(735,"John","Doe","john.doe@sta.uwi.edu","johnpass")
     staff = addStaff(738,"Bob","Doe","bob.doe@sta.uwi.edu","bobpass")
-    student = addStudent(816,"Sally","Shell","sally.shell@my.uwi.edu",2,"BSc Computer Science (Special)")
+    student = addStudent(816,"Sally","Shell","sally.shell@my.uwi.edu",2,"BSc Computer Science (Special)","FST")
     newSemester = addSemester(SemNum.SEM1,2023,date(2023,8,25),date(2023,12,25))
     newSemester2 = addSemester(SemNum.SEM2,2024,date(2024,1,21),date(2024,5,10))
     summer  = addSemester(SemNum.SEM3,2024,date(2024,5,19),date(2024,7,26))

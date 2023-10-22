@@ -1,13 +1,13 @@
-from App.models import Student
+from App.models import Student,Faculty
 from App.database import db
 import App.controllers.review as review
 
 # adds a new student 
 
-def addStudent (id,firstName,lastName,email,year,programme):
+def addStudent (id,firstName,lastName,email,year,programme,faculty):
     try:
         if get_student(id) is None:
-            newStudent = Student(id = id,firstName = firstName,lastName = lastName,email = email,year = year,programme = programme)
+            newStudent = Student(id = id,firstName = firstName,lastName = lastName,email = email,year = year,programme = programme,faculty = faculty)
             db.session.add(newStudent)
             db.session.commit()
             updateStudentStatistics(newStudent.id)
@@ -130,3 +130,20 @@ def updateStudentStatistics(id):
         db.session.commit()
     except Exception:
         db.session.rollback()
+
+def format_faculty(text):
+    mappings = {
+        "FST" : Faculty.FST,
+        "FSS" : Faculty.FSS,
+        "FFA" : Faculty.FFA,
+        "FOL" : Faculty.FOL,
+        "FMS" : Faculty.FMS,
+        "FOE" : Faculty.FOE,
+        "FHE" : Faculty.FHE,
+        "FOS" : Faculty.FOS,
+    }
+    
+    result = mappings.get(text, None)
+    if result:
+        return result
+    return None

@@ -14,7 +14,8 @@ from App.controllers import (
     update_student,
     getRatedReviews,
     get_student_JSON,
-    getReviewsByStudent_JSON
+    getReviewsByStudent_JSON,
+    format_faculty
 
 )
 
@@ -48,7 +49,8 @@ def search_student_action(studentid):
 def create_student_action():
     try:
         data = request.form
-        newStudent= addStudent(data['id'], data['firstname'], data['lastname'], data['email'], data['year'],data['programme'])
+
+        newStudent= addStudent(data['id'], data['firstname'], data['lastname'], data['email'], data['year'],data['programme'],"FST")
         
         if newStudent is None:
             return jsonify(error='Invalid Id or email!'),401
