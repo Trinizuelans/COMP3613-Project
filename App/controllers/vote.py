@@ -73,6 +73,7 @@ def calcDownvotes(reviewId):
 def updateVote(voteId,rating,upvote):
     try:
         vote = getVote(voteId)
+        print(vote)
         if vote:
             vote.rating = rating
             vote.upvote = upvote

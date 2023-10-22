@@ -14,6 +14,12 @@ from App.controllers import (
     get_student,
     addStudent,
     update_student,
+    addStaff,
+    get_staff,
+    addReview,
+    addVote,
+    getReview,
+    updateVote
 )
 
 
@@ -96,4 +102,36 @@ class StudentIntegrationTests(unittest.TestCase):
         Update_student = update_student(Search_student.id, "Hally", "Ham", "hally@mail.com", 3, "Computer Science (General)")
         assert Update_student.firstName == "Hally"
         
- 
+class ReviewIntegrationTests(unittest.TestCase): 
+
+    def testA_add_staff(self):
+        New_staff = addStaff (739, "Phaedra", "Mohammed", "phae@mail.com", "phaepass")
+        assert New_staff.firstName == "Phaedra"
+
+    def testB_log_review(self):
+        Creator = get_staff(739)
+        New_review = addReview(Creator.id,817,1,"Ally is a good mango",3)
+        assert New_review.creatorId == 739 and New_review.studentId == 817 
+
+    def testC_upvote_review(self):
+        New_staff = addStaff (740, "Perm", "Mohan", "perm@mail.com", "permpass")
+        New_vote = addVote(740,3,3,upvote = True)
+        assert New_vote.voterId == 740 and New_vote.rating == 3 and New_vote.upvote == True
+
+    def testD_downvote_review(self):
+        New_staff = addStaff (741, "Nick", "Mendez", "nick@mail.com", "nickpass")
+        New_vote = addVote(741,3,2,upvote = False)
+        assert New_vote.voterId == 741 and New_vote.rating == 2 and New_vote.upvote == False
+
+    def testE_updatevote_review(self):
+        Updated_vote = updateVote(3,3,True)
+        assert Updated_vote.voterId == 741 and Updated_vote.rating == 3 and Updated_vote.upvote == True and Updated_vote.voteId == 3
+        
+
+    
+
+    
+
+
+
+     
