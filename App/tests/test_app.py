@@ -10,7 +10,10 @@ from App.controllers import (
     login,
     get_user,
     get_user_by_username,
-    update_user
+    update_user,
+    get_student,
+    addStudent,
+    update_student,
 )
 
 
@@ -75,3 +78,22 @@ class UsersIntegrationTests(unittest.TestCase):
         update_user(1, "ronnie")
         user = get_user(1)
         assert user.username == "ronnie"
+
+
+class StudentIntegrationTests(unittest.TestCase):
+
+    def test_add_student(self):
+        New_student = addStudent (817,"Ally","Sam","ally@mail.con",3,"Computer Science (Special)")
+        Search_student = get_student(817)
+        assert Search_student.firstName == "Ally"
+
+    def test_search_student(self):
+        student =  get_student(817)
+        assert student.firstName == "Ally"
+
+    def test_update_student(self):
+        Search_student = get_student(817)
+        Update_student = update_student(Search_student.id, "Hally", "Ham", "hally@mail.com", 3, "Computer Science (General)")
+        assert Update_student.firstName == "Hally"
+        
+ 

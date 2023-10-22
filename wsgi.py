@@ -115,8 +115,12 @@ def user_tests_command(type):
         sys.exit(pytest.main(["-k", "UserUnitTests"]))
     elif type == "int":
         sys.exit(pytest.main(["-k", "UserIntegrationTests"]))
+    elif type == "intStudent":
+        sys.exit(pytest.main(["-k", "StudentIntegrationTests"]))
     else:
         sys.exit(pytest.main(["-k", "App"]))
+
+
     
 
 app.cli.add_command(test)
