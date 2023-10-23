@@ -32,38 +32,7 @@ LOGGER = logging.getLogger(__name__)
 '''
    Unit Tests
 '''
-class UserUnitTests(unittest.TestCase):
 
-    def testA_new_user(self):
-        creatorId = 1
-        firstName = "Bob"
-        lastName = "Test"
-        email = "bob@mail.com"
-        password = "bobpass"
-        
-        new_staff = addStaff (creatorId, firstName, lastName, email, password)
-        
-        assert new_staff.id == 1
-
-    # pure function no side effects or integrations called
-    def testB_get_json(self):
-        staff = get_staff_JSON(1)
-        self.assertDictEqual(staff, 
-            {'staffid': 1,'firstName': "Bob",
-            'lastName': "Test",
-            'email': "bob@mail.com",
-            'reviews': []})
-    
-    def testC_hashed_password(self):
-        password = "bobpass"
-        hashed = generate_password_hash(password, method='sha256')
-        staff = get_staff(1)
-        assert staff.password != password
-
-    def testD_check_password(self):
-        password = "bobpass"
-        staff = get_staff(1)
-        assert staff.check_password(password)
 
 '''
     Integration Tests
@@ -98,6 +67,39 @@ def test_authenticate():
 #         update_user(1, "ronnie")
 #         user = get_user(1)
 #         assert user.username == "ronnie"
+
+class StaffIntegrationTests(unittest.TestCase):
+
+    def testA_new_user(self):
+        creatorId = 1
+        firstName = "Bob"
+        lastName = "Test"
+        email = "bob@mail.com"
+        password = "bobpass"
+        
+        new_staff = addStaff (creatorId, firstName, lastName, email, password)
+        
+        assert new_staff.id == 1
+
+    # pure function no side effects or integrations called
+    def testB_get_json(self):
+        staff = get_staff_JSON(1)
+        self.assertDictEqual(staff, 
+            {'staffid': 1,'firstName': "Bob",
+            'lastName': "Test",
+            'email': "bob@mail.com",
+            'reviews': []})
+    
+    def testC_hashed_password(self):
+        password = "bobpass"
+        hashed = generate_password_hash(password, method='sha256')
+        staff = get_staff(1)
+        assert staff.password != password
+
+    def testD_check_password(self):
+        password = "bobpass"
+        staff = get_staff(1)
+        assert staff.check_password(password)
 
 
 class StudentIntegrationTests(unittest.TestCase):
