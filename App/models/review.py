@@ -13,9 +13,6 @@ class Review (db.Model):
     downvote = db.Column(db.Integer)
     votebalance = db.Column(db.Integer)
 
-    # creator = db.relationship('Staff',backref = db.backref('review',lazy = 'joined'))
-    # student = db.relationship('Student',backref = db.backref('review',lazy = 'joined'))
-
     def __init__(self,creatorId,studentId,comment,score,semesterId):
             self.creatorId = creatorId
             self.studentId = studentId

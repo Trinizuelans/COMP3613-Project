@@ -3,7 +3,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from App.main import create_app
 from App.database import db, create_db
-from App.models import User,Faculty
+from App.models import *
 from App.controllers import (
     create_user,
     get_all_users_json,
@@ -25,6 +25,7 @@ from App.controllers import (
     addUpvote,
     format_faculty
 )
+from datetime import date
 
 
 LOGGER = logging.getLogger(__name__)
@@ -32,38 +33,200 @@ LOGGER = logging.getLogger(__name__)
 '''
    Unit Tests
 '''
-class UserUnitTests(unittest.TestCase):
+class StaffUnitTests(unittest.TestCase):
     def testA_new_user(self):
-        creatorId = 1
+        staffId = 1
         firstName = "Bob"
         lastName = "Test"
         email = "bob@mail.com"
         password = "bobpass"
         
-        new_staff = addStaff (creatorId, firstName, lastName, email, password)
+        new_staff = Staff (staffId, firstName, lastName, email, password)
         
-        assert new_staff.id == 1
+        assert new_staff.id == staffId
 
     # pure function no side effects or integrations called
-    def testB_get_json(self):
-        staff = get_staff_JSON(1)
-        self.assertDictEqual(staff, 
-            {'staffid': 1,'firstName': "Bob",
+    def testB_Staff_get_json(self):
+        staffId = 1
+        firstName = "Bob"
+        lastName = "Test"
+        email = "bob@mail.com"
+        password = "bobpass"
+        
+        new_staff = Staff (staffId, firstName, lastName, email, password)
+        staff = new_staff.toJSON()
+
+        self.assertDictEqual(staff, {
+            'staffid': 1,
+            'firstName': "Bob",
             'lastName': "Test",
             'email': "bob@mail.com",
-            'reviews': []})
+            'reviews': []
+        })
     
     def testC_hashed_password(self):
+        staffId = 1
+        firstName = "Bob"
+        lastName = "Test"
+        email = "bob@mail.com"
         password = "bobpass"
+
         hashed = generate_password_hash(password, method='sha256')
-        staff = get_staff(1)
+        staff = Staff (staffId, firstName, lastName, email, password)
         assert staff.password != password
 
     def testD_check_password(self):
+        staffId = 1
+        firstName = "Bob"
+        lastName = "Test"
+        email = "bob@mail.com"
         password = "bobpass"
-        staff = get_staff(1)
+        staff = Staff (staffId, firstName, lastName, email, password)
         assert staff.check_password(password)
 
+class StudentUnitTests(unittest.TestCase):
+        
+    def testA_new_student(self):
+        studentId = 2
+        firstName = "Rob"
+        lastName = "Test"
+        email = "rob@mail.com"      
+        year = 2
+        programme = "Computer Science (Special)"
+        faculty = "FST"
+
+        student = Student(studentId,firstName,lastName,email,year,programme,faculty) 
+        assert student.id == studentId
+
+    def testB_Student_get_json(self):  
+        studentId = 2
+        firstName = "Rob"
+        lastName = "Test"
+        email = "rob@mail.com"      
+        year = 2
+        programme = "BSc Computer Science (Special)"
+        faculty = "FST"
+
+        student = Student(studentId,firstName,lastName,email,year,programme,faculty) 
+        student = student.toJSON()
+
+        self.assertDictEqual(student, {
+            'studentId': 2 ,
+            'firstName': 'Rob',
+            'lastName':  'Test',
+            'email': 'rob@mail.com',
+            'year': 2 ,
+            'reviews': [ ] ,
+            'karma': None,
+            'standing': None  ,
+            'programme': "BSc Computer Science (Special)",
+            'faculty': 'Faculty of Science and Technology'
+
+        })  
+        
+    
+class ReviewUnitTests(unittest.TestCase):
+
+    def testA_new_review(self):
+        creatorId = 1
+        studentId = 2
+        comment = "Rob is a good mango"
+        score = 3
+        semesterId = 1
+    
+        new_review = Review (creatorId, studentId, comment, score, semesterId)
+        assert new_review.creatorId == creatorId
+        assert new_review.studentId == studentId
+        
+
+    def testB_Review_get_json(self):
+
+        creatorId = 1
+        studentId = 2
+        comment = "Rob is good"
+        score = 3
+        semesterId = 1
+
+        new_review = Review (creatorId, studentId, comment, score, semesterId)
+
+        review = new_review.toJSON()
+        
+        self.assertDictEqual(review,{
+            'reviewId': None,
+            'creatorId': 1,
+            'studentId': 2,
+            'votes':  [],
+            'semester': 1,
+            'comment': "Rob is good",
+            'score' : 3,
+            'upvote': 0,
+            'downvote': 0,
+            'votebalance': 0
+        }
+        )
+
+class VoteUnitTests(unittest.TestCase):
+    def testA_new_vote(self):
+        voterId = 1
+        reviewId = 1
+        rating = 3  
+
+        new_vote = Vote(voterId,reviewId,rating) 
+        
+        assert new_vote.voterId == voterId
+        assert new_vote.reviewId == reviewId
+        assert new_vote.rating == rating
+    
+    def testB_Vote_get_json(self):
+        voterId = 1
+        reviewId = 1
+        rating = 3  
+
+        new_vote = Vote(voterId,reviewId,rating)
+        new_vote = new_vote.toJSON()
+
+        self.assertDictEqual(new_vote,{
+            'voteId': None,
+            'voterId': 1,
+            'reviewId': 1,
+            'rating': 3,
+            'upvote': None
+        })
+
+class SemesterUnitTests(unittest.TestCase):
+
+    def testA_new_semester(self):
+        semesterName = "Summer" 
+        year = 2023
+        semStart = date(2023,8,25)
+        semEnd =   date(2023,12,25)
+        
+        sem = Semester(semesterName, year, semStart, semEnd)
+
+        assert sem.semesterName == semesterName
+        assert sem.year == year
+        assert sem.semStart == semStart
+        assert sem.semEnd == semEnd 
+
+    def testB_Semester_get_json(self):
+        semesterName = SemNum.SEM3
+        year = 2023
+        semStart = date(2023,8,25)
+        semEnd =   date(2023,12,25)
+
+        sem = Semester(semesterName, year, semStart, semEnd)
+        semester = sem.toJSON()
+        print(semester)
+
+        self.assertDictEqual(semester,{
+           'semesterId': None,
+           'semesterName': "Summer",
+           'year': 2023,
+           'semStart': semStart,
+           'semEnd': semEnd
+        }
+        )
+        
 
 '''
     Integration Tests
@@ -82,22 +245,6 @@ def empty_db():
 def test_authenticate():
     user = addStaff(2,"Rob","Ben","robben@mail.com","robpass")
     assert login(2, "robpass") != None
-
-# class UsersIntegrationTests(unittest.TestCase):
-
-#     def test_create_user(self):
-#         user = create_user("rick", "bobpass")
-#         assert user.username == "rick"
-
-#     def test_get_all_users_json(self):
-#         users_json = get_all_users_json()
-#         self.assertListEqual([{"id":1, "username":"bob"}, {"id":2, "username":"rick"}], users_json)
-
-#     # Tests data changes in the database
-#     def test_update_user(self):
-#         update_user(1, "ronnie")
-#         user = get_user(1)
-#         assert user.username == "ronnie"
 
 class StaffIntegrationTests(unittest.TestCase):
     def testA_add_staff(self):
