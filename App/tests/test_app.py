@@ -32,6 +32,37 @@ LOGGER = logging.getLogger(__name__)
 '''
    Unit Tests
 '''
+class UserUnitTests(unittest.TestCase):
+    def testA_new_user(self):
+        creatorId = 1
+        firstName = "Bob"
+        lastName = "Test"
+        email = "bob@mail.com"
+        password = "bobpass"
+        
+        new_staff = addStaff (creatorId, firstName, lastName, email, password)
+        
+        assert new_staff.id == 1
+
+    # pure function no side effects or integrations called
+    def testB_get_json(self):
+        staff = get_staff_JSON(1)
+        self.assertDictEqual(staff, 
+            {'staffid': 1,'firstName': "Bob",
+            'lastName': "Test",
+            'email': "bob@mail.com",
+            'reviews': []})
+    
+    def testC_hashed_password(self):
+        password = "bobpass"
+        hashed = generate_password_hash(password, method='sha256')
+        staff = get_staff(1)
+        assert staff.password != password
+
+    def testD_check_password(self):
+        password = "bobpass"
+        staff = get_staff(1)
+        assert staff.check_password(password)
 
 
 '''
@@ -69,37 +100,21 @@ def test_authenticate():
 #         assert user.username == "ronnie"
 
 class StaffIntegrationTests(unittest.TestCase):
-
-    def testA_new_user(self):
-        creatorId = 1
-        firstName = "Bob"
-        lastName = "Test"
-        email = "bob@mail.com"
-        password = "bobpass"
-        
-        new_staff = addStaff (creatorId, firstName, lastName, email, password)
-        
-        assert new_staff.id == 1
-
-    # pure function no side effects or integrations called
-    def testB_get_json(self):
-        staff = get_staff_JSON(1)
-        self.assertDictEqual(staff, 
-            {'staffid': 1,'firstName': "Bob",
-            'lastName': "Test",
-            'email': "bob@mail.com",
-            'reviews': []})
-    
-    def testC_hashed_password(self):
-        password = "bobpass"
-        hashed = generate_password_hash(password, method='sha256')
-        staff = get_staff(1)
-        assert staff.password != password
-
-    def testD_check_password(self):
-        password = "bobpass"
-        staff = get_staff(1)
-        assert staff.check_password(password)
+    def testA_add_staff(self):
+            creatorId = 739
+            firstName = "Phae"
+            lastName = "Mohammed"
+            email = "phae@mail.com"
+            password = "phaepass"
+            
+            new_staff = addStaff (creatorId, firstName, lastName, email, password)
+            
+            assert new_staff is not None, "Staff creation failed."
+            assert new_staff.id == creatorId, f"Expected creatorId: {creatorId}, Actual: {new_staff.id}"
+            assert new_staff.firstName == firstName, f"Expected firstName: {firstName}, Actual: {new_staff.firstName}"
+            assert new_staff.lastName == lastName, f"Expected lastName: {lastName}, Actual: {new_staff.lastName}"
+            assert new_staff.email == email, f"Expected email: {email}, Actual: {new_staff.email}"
+            
 
 
 class StudentIntegrationTests(unittest.TestCase):
@@ -150,23 +165,9 @@ class StudentIntegrationTests(unittest.TestCase):
         
 class ReviewIntegrationTests(unittest.TestCase): 
 
-    def testA_add_staff(self):
-        creatorId = 739
-        firstName = "Phae"
-        lastName = "Mohammed"
-        email = "phae@mail.com"
-        password = "phaepass"
-        
-        new_staff = addStaff (creatorId, firstName, lastName, email, password)
-        
-        assert new_staff is not None, "Staff creation failed."
-        assert new_staff.id == creatorId, f"Expected creatorId: {creatorId}, Actual: {new_staff.id}"
-        assert new_staff.firstName == firstName, f"Expected firstName: {firstName}, Actual: {new_staff.firstName}"
-        assert new_staff.lastName == lastName, f"Expected lastName: {lastName}, Actual: {new_staff.lastName}"
-        assert new_staff.email == email, f"Expected email: {email}, Actual: {new_staff.email}"
-        
+    
 
-    def testB_log_review(self):
+    def testA_log_review(self):
         creatorId = 739
         studentId = 817
         semesterId = 1
@@ -185,7 +186,7 @@ class ReviewIntegrationTests(unittest.TestCase):
         assert new_review.semesterId== semesterId, f"Expected semesterId: {semesterId}, Actual: {new_review.semesterId}"
      
 
-    def testC_upvote_review(self):
+    def testB_upvote_review(self):
         voterId = 740
         reviewId = 1
 
@@ -201,7 +202,7 @@ class ReviewIntegrationTests(unittest.TestCase):
         assert new_vote.upvote, "Expected upvote: True, Actual: False"
 
 
-    def testD_downvote_review(self):
+    def testC_downvote_review(self):
         voter_id = 741
         review_id = 1
         rating = 2
@@ -217,7 +218,7 @@ class ReviewIntegrationTests(unittest.TestCase):
         assert new_vote.rating == rating, f"Expected rating: {rating}, Actual: {new_vote.rating}"
         assert not new_vote.upvote, "Expected upvote: False, Actual: True"
 
-    def testE_updatevote_review(self):
+    def testD_updatevote_review(self):
         voter_id = 741
         vote_id = 3
         new_rating = 3
