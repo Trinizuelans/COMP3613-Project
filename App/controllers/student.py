@@ -56,7 +56,7 @@ def update_student_programme(id, prog):
 
  # updates all aspects of a specified student 
 
-def update_student(id, firstname, lastname, email, year, prog):
+def update_student(id, firstname, lastname, email, year, prog,faculty):
     try:
         student = get_student(id)
         student.firstName = firstname
@@ -64,6 +64,8 @@ def update_student(id, firstname, lastname, email, year, prog):
         student.email = email
         student.year = year
         student.programme = prog
+        student.faculty = faculty
+        
         db.session.add(student)
         db.session.commit()
         return student

@@ -64,7 +64,7 @@ def create_student_action():
 def update_student_action():
     try:
         data = request.form
-        student = update_student(data['id'], data['firstname'], data['lastname'], data['email'], data['year'],data['programme'])
+        student = update_student(data['id'], data['firstname'], data['lastname'], data['email'], data['year'],data['programme'],data['faculty'])
         if student is None:
             return jsonify(error='Unable to update Student!'),401
     

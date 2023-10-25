@@ -216,7 +216,6 @@ class SemesterUnitTests(unittest.TestCase):
 
         sem = Semester(semesterName, year, semStart, semEnd)
         semester = sem.toJSON()
-        print(semester)
 
         self.assertDictEqual(semester,{
            'semesterId': None,
@@ -302,8 +301,9 @@ class StudentIntegrationTests(unittest.TestCase):
         email = "hally@mail.com"
         year = 3
         programme = "Computer Science (General)"
+        faculty = "FST"
 
-        updated_student = update_student(studentId,firstName,lastName,email,year,programme)
+        updated_student = update_student(studentId,firstName,lastName,email,year,programme,faculty)
 
         assert updated_student is not None, "Student update failed."
         assert updated_student.firstName == firstName, f"Expected firstName: {firstName}, Actual: {updated_student.firstName}"
