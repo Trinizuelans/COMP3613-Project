@@ -50,7 +50,7 @@ def create_student_action():
     try:
         data = request.form
 
-        newStudent= addStudent(data['id'], data['firstname'], data['lastname'], data['email'], data['year'],data['programme'],"FST")
+        newStudent= addStudent(data['id'], data['firstname'], data['lastname'], data['email'], data['year'],data['programme'],data['faculty'])
         
         if newStudent is None:
             return jsonify(error='Invalid Id or email!'),401

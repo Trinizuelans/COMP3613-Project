@@ -65,6 +65,7 @@ def update_student(id, firstname, lastname, email, year, prog,faculty):
         student.year = year
         student.programme = prog
         student.faculty = format_faculty(faculty)
+        print(student.faculty.value)
 
         db.session.add(student)
         db.session.commit()
