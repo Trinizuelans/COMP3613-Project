@@ -302,13 +302,15 @@ class StudentIntegrationTests(unittest.TestCase):
         year = 3
         programme = "Computer Science (General)"
         faculty = "FST"
+        f = format_faculty(faculty)
 
         updated_student = update_student(studentId,firstName,lastName,email,year,programme,faculty)
-
+        print(update_student)
         assert updated_student is not None, "Student update failed."
         assert updated_student.firstName == firstName, f"Expected firstName: {firstName}, Actual: {updated_student.firstName}"
         assert updated_student.lastName == lastName, f"Expected lastName: {lastName}, Actual: {updated_student.lastName}"
         assert updated_student.email == email, f"Expected email: {email}, Actual: {updated_student.email}"
+        assert updated_student.faculty == f, f"Expected faculty: {f}, Actual: {updated_student.faculty}"
         
 class ReviewIntegrationTests(unittest.TestCase): 
 
